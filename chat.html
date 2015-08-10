@@ -1,0 +1,80 @@
+<!doctype html>
+  <html>
+    <head>
+      <title> Ommelette </title>
+      <link rel="stylesheet" href = 'assets/chat.css'>
+      <script src="/socket.io/socket.io.js"></script>
+    </head>
+  <body>
+
+    <ul id = 'messages'><ul>
+      <form action = "">
+        <input id = "m" autocomplete = 'off' />
+        <button id='btn'>Send</button>
+        <button id='nud'> Nudge!</button>
+      </form>
+  </body>
+  <script src= "https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src= "http://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    var socket = io();
+    var timeStamp = new Date();
+    var username = prompt('What is your username?');
+    var pword = prompt('What is your password');
+    var startTime = function() {
+
+      var today = new Date();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      return h + ':' + m
+      var t = setInterval(function() {
+        startTime()
+        }, 1000);
+      };
+
+    var checkTime = function(i) {
+      if (i < 10) {
+        i = "0" + i
+      };
+
+      return i;
+      };
+    var changeColor = function() {
+        var available_colors = ['red', 'blue', 'green'];
+        setInterval(function() {
+
+          var i = Math.floor((Math.random() * available_colors.length));
+          var selected_color = available_colors[i];
+          $('#btn').css({'background-color': selected_color, 'transition': '1s'});
+        }, 1000);
+      };
+    changeColor();
+    if (pword!='dog'){
+      socket.exit(55-i)//exit code = 45
+    }
+
+
+    if(username){
+      socket.emit('sendNewUser',username);
+    };
+
+
+    socket.on('message' , function(message,username){
+      $('#messages').append('<li>' + username + ' says    ---->'+ message + '               -' +startTime() + '</li>')
+    });
+    socket.on('newUser',function(username){
+      $('#messages').append('<li>' + username + ' has joined the chat!' + '</li>')
+    });
+    $('form').submit(function(){
+      socket.emit('chat message',$("#m").val(),username);
+      $('#m').val("");
+      return false;
+    });
+
+
+
+  </script>
+</html>
